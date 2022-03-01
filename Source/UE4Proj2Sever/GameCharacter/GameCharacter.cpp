@@ -84,10 +84,10 @@ void AGameCharacter::CameraUpKey(float AxisValue)
 
 void AGameCharacter::CameraZoomKey(float AxisValue)
 {
-	m_SpringArm->TargetArmLength -= AxisValue * 20.f;
+	m_SpringArm->TargetArmLength -= AxisValue * 50.f;
 	
-	if (m_SpringArm->TargetArmLength < 700.f)
-		m_SpringArm->TargetArmLength = 700.f;
+	if (m_SpringArm->TargetArmLength < 300.f)
+		m_SpringArm->TargetArmLength = 300.f;
 	
 	else if (m_SpringArm->TargetArmLength > 1700.f)
 		m_SpringArm->TargetArmLength = 1700.f;

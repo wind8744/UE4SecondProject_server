@@ -41,7 +41,6 @@ void AGameCharController::MoveToMouseCursor()
 
 	if (Hit.bBlockingHit)
 	{
-		//SetControlRotation(Hit.ImpactPoint.ToOrientationRotator());
 		SetNewDestination(Hit.ImpactPoint);
 	}
 }
@@ -55,7 +54,7 @@ void AGameCharController::SetNewDestination(const FVector DestLocation)
 
 		if (Distance > 120.0f)
 		{
-			SetControlRotation(DestLocation.ToOrientationRotator());
+			//SetControlRotation(DestLocation.ToOrientationRotator());
 			UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, DestLocation);
 		}
 	}

@@ -7,7 +7,16 @@
 #include "DrawDebugHelpers.h"
 #include "Engine.h"
 #include "EngineGlobals.h"
+
+#include "Networking.h"
+#include "Sockets.h"
+#include "SocketSubsystem.h"
+#include "HAL/Runnable.h"
+#include "HAL/RunnableThread.h"
+
 #include "GameInfo.generated.h"
+
+#define PACKET_SIZE	1024
 
 DECLARE_LOG_CATEGORY_EXTERN(UE4Proj2Server, Log, All);
 #define	LOG_CALLINFO	(FString(__FUNCTION__) + TEXT("{") + FString::FromInt(__LINE__) + TEXT("}"))
