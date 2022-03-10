@@ -37,3 +37,17 @@ enum class ECharAnimType : uint8
 	SKILL,
 	DEATH,
 };
+
+struct RecvQueueData
+{
+	int32 Protocol;
+	int32 Length;
+	uint8 Packet[PACKET_SIZE];
+
+	RecvQueueData()	:
+		Protocol(-1),
+		Length(0),
+		Packet{}
+	{
+	}
+};

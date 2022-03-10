@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../GameInfo.h"
+#include "RecvQueue.h"
 
 /**
  * 게임 시작에 생성 ~ 끝에 제거
@@ -15,12 +16,21 @@ public:
 
 private:
 	class NetworkSession*	m_Session;
-	bool					m_Run; //thread
+	bool					m_Run;			
+
+	//thread
 	class RecvThread*		m_Thread;
 	FRunnableThread*		m_RunnableThread;
 
+	RecvQueue				m_RecvQueue;
+
 public:
 	bool Init();
+
+	RecvQueue* GetQueue()
+	{
+		return &m_RecvQueue;
+	}
 
 private:
 	static NetworkManager* m_Inst;

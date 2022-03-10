@@ -2,6 +2,8 @@
 
 
 #include "RecvThread.h"
+#include "RecvQueue.h"
+#include "NetworkManager.h"
 #include "NetworkSession.h"
 
 RecvThread::RecvThread():
@@ -29,11 +31,15 @@ uint32 RecvThread:: Run()
 		int32 Protocol = -1, Length = 0;
 
 		bool Result = m_Session->Read(Protocol, Length, Packet);
-
+		
 		if (!Result) // 다시 받아라
 			continue;
 		
 		// 데이터를 가지고 프로토콜이 뭐냐에 따라 따로 처리를 하는 system 만들기.
+
+		// 큐를 받아옴
+		RecvQueue* Que = NetworkManager::GetInst()->GetQueue();
+		Que->Push(Protocol, Length, Packet);
 
 	}
 

@@ -2,7 +2,7 @@
 
 
 #include "NetworkSession.h"
-
+#include "PacketStream.h"
 
 NetworkSession::NetworkSession()
 {
@@ -53,8 +53,13 @@ bool NetworkSession::Read(int32& Protocol, int32& Length, uint8* Packet)
 	if (!Result || Length <= 0)
 		return false;
 	
-	// 읽어온 패킷으로부터 프로토콜과 실제 패킷부분의 길이, 패킷의 내용을 분리한다.
+	// 읽어온 패킷으로부터 "프로토콜"과 실제 "패킷부분의 길이" "패킷의 내용"을 분리한다.
+	PacketStream stream;
+	stream.SetBuffer(m_RecvPacket);
 
+	stream.Read(&Protocol, sizeof(int32));
+	stream.Read(&Length, sizeof(int32));
+	stream.Read(Packet, Length);
 
 	return true;
 }
@@ -62,6 +67,13 @@ bool NetworkSession::Read(int32& Protocol, int32& Length, uint8* Packet)
 bool NetworkSession::Write(int32 Protocol, int32 Length, uint8* Packet)
 {
 	// 보내고자 하는 프로토콜, 길이, 패킷 내용을 하나의 버퍼에 넣어서 보내주도록 한다.
+	PacketStream stream;
+	stream.SetBuffer(m_SendPacket);
 
-	return true;
+	stream.Write(&Protocol, sizeof(int32));
+	stream.Write(&Length, sizeof(int32));
+	stream.Write(Packet, Length);
+
+	// 다 써준 후 +8(byte)만큼 , Length에 보낸 크기를 받아오기
+	return m_Socket->Send(m_SendPacket, Length + 8, Length);
 }
