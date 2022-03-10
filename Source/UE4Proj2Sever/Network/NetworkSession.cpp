@@ -44,3 +44,24 @@ void NetworkSession::Close()
 	}
 
 }
+
+
+bool NetworkSession::Read(int32& Protocol, int32& Length, uint8* Packet)
+{
+	bool Result = m_Socket->Recv(m_RecvPacket, PACKET_SIZE, Length, ESocketReceiveFlags::None);
+	
+	if (!Result || Length <= 0)
+		return false;
+	
+	// 읽어온 패킷으로부터 프로토콜과 실제 패킷부분의 길이, 패킷의 내용을 분리한다.
+
+
+	return true;
+}
+
+bool NetworkSession::Write(int32 Protocol, int32 Length, uint8* Packet)
+{
+	// 보내고자 하는 프로토콜, 길이, 패킷 내용을 하나의 버퍼에 넣어서 보내주도록 한다.
+
+	return true;
+}

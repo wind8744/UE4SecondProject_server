@@ -24,3 +24,4 @@ void AUE4Proj2SeverGameModeBase::BeginPlay()
 	Super::BeginPlay();
 
 }
+

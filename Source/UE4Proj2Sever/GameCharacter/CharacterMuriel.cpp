@@ -11,11 +11,12 @@ ACharacterMuriel::ACharacterMuriel()
 
 	// Mesh Asset
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MurielAsset(TEXT("SkeletalMesh'/Game/ParagonMuriel/Characters/Heroes/Muriel/Skins/Tier_1/Muriel_Black/Meshes/MurielBlack.MurielBlack'"));
+	
 	if (MurielAsset.Succeeded())
 		GetMesh()->SetSkeletalMesh(MurielAsset.Object);
 
 	// Anim Asset
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimAsset(TEXT("AnimBlueprint'/Game/Player/Muriel/BPMurielAnim.BPMurielAnim_C'"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimAsset(TEXT("AnimBlueprint'/Game/Player/Muriel/BPMurielAnim.BPMurielAnim_C'")); 
 	if (AnimAsset.Succeeded())
 		GetMesh()->SetAnimInstanceClass(AnimAsset.Class);
 	

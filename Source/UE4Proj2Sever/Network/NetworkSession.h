@@ -24,4 +24,7 @@ public:
 	bool Connect(const FString& IPAddr, int32 Port); //주소와 포트
 	void Close();
 
+	bool Read(int32& Protocol, int32& Length, uint8* Packet);
+	bool Write(int32 Protocol, int32 Length, uint8* Packet);
+
 };

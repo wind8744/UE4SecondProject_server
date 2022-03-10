@@ -23,8 +23,18 @@ uint32 RecvThread:: Run()
 {
 	while (m_Loop)
 	{
+		// 패킷 실제 데이타 (내가 받은 채팅 내용)
 		uint8 Packet[PACKET_SIZE] = {};
-		//bool Result = m_Session;
+
+		int32 Protocol = -1, Length = 0;
+
+		bool Result = m_Session->Read(Protocol, Length, Packet);
+
+		if (!Result) // 다시 받아라
+			continue;
+		
+		// 데이터를 가지고 프로토콜이 뭐냐에 따라 따로 처리를 하는 system 만들기.
+
 	}
 
 	return 0;
