@@ -51,3 +51,8 @@ struct RecvQueueData
 	{
 	}
 };
+
+enum class NetworkProtocol
+{
+	Chat
+};

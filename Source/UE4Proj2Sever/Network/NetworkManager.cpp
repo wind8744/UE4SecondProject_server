@@ -21,6 +21,20 @@ NetworkManager::~NetworkManager()
 	if (m_Session)
 		m_Session->Close();
 
+	if (m_RunnableThread)
+	{
+		m_RunnableThread->Kill();
+		m_RunnableThread->WaitForCompletion();
+		m_RunnableThread = nullptr;
+	}
+
+	if (m_Thread)
+	{
+		delete m_Thread;
+		m_Thread = nullptr;
+	}
+
+
 	if (m_Session)
 		delete m_Session;
 }
@@ -36,7 +50,7 @@ bool NetworkManager::Init()
 	m_Session = new NetworkSession; 
 	
 	// 127.0.0.1 은 로컬. 현재 이 컴의 ip 주소, 서버에 접속요청 할 것임
-	bool Connect = m_Session->Connect(TEXT("127.0.0.1"), 6000);
+	bool Connect = m_Session->Connect(TEXT("192.168.0.8"), 6000);
 	
 	// 접속이 되면
 	if(Connect)

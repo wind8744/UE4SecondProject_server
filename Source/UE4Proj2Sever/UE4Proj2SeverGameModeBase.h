@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameInfo.h"
+#include "UI/MainUI.h"
 #include "GameFramework/GameModeBase.h"
 #include "UE4Proj2SeverGameModeBase.generated.h"
 
@@ -17,6 +18,11 @@ class UE4PROJ2SEVER_API AUE4Proj2SeverGameModeBase : public AGameModeBase
 public:
 	AUE4Proj2SeverGameModeBase();
 	
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		TSubclassOf<UMainUI>	m_MainUIClass;
+
+	UMainUI* m_MainWidget;
 
 public:
 	virtual void BeginPlay() override;

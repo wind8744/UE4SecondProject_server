@@ -32,6 +32,12 @@ public:
 		return &m_RecvQueue;
 	}
 
+	NetworkSession* GetSession()
+	{
+		return m_Session;
+	}
+
+
 private:
 	static NetworkManager* m_Inst;
 
