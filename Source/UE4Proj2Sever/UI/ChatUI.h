@@ -36,5 +36,6 @@ public:
 		void SendBtnClick();
 
 	void AddMessage(const FString& Msg);
+	void AddMyMessage(const FString& Mgr);
 
 };

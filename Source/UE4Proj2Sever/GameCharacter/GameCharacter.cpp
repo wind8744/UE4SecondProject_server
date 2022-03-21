@@ -2,6 +2,9 @@
 
 
 #include "GameCharacter.h"
+#include "../Network/NetworkManager.h"
+#include "../Network/NetworkSession.h"
+#include "../Network/PacketStream.h"
 
 // Sets default values
 AGameCharacter::AGameCharacter()
@@ -27,6 +30,25 @@ AGameCharacter::AGameCharacter()
 void AGameCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// 서버에 현재 캐릭터의 위치 넘겨줌
+	NetworkSession* Session = NetworkManager::GetInst()->GetSession();
+	
+	PacketStream Stream;
+	uint8 Packet[PACKET_SIZE] = {};
+	
+	FVector charLoc = GetActorLocation();
+	FRotator charRot = GetActorRotation();
+	FVector charScale = GetActorScale();
+
+	Stream.SetBuffer(Packet);
+	Stream.Write(&m_CharInfo.Job,sizeof(ECharJob));
+	Stream.Write(&charLoc, sizeof(FVector));
+	Stream.Write(&charScale, sizeof(FVector));
+	Stream.Write(&charRot, sizeof(FRotator));
+	Stream.Write(&m_CharInfo.Name, 12);
+	Session->Write((int)NetworkProtocol::UserConnect, Stream.GetLength(), Packet);
+
 }
 
 // Called every frame

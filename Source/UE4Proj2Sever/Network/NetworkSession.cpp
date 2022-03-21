@@ -25,7 +25,7 @@ bool NetworkSession::Connect(const FString& IPAddr, int32 Port)
 	FIPv4Address::Parse(IPAddr, ip); //ip주소 들어온 것을 여기에
 
 	//실제 주소정보를 받아서 넘겨줌
-	TSharedRef<FInternetAddr>	addr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
+	TSharedRef<FInternetAddr> addr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
 	addr->SetIp(ip.Value);
 	addr->SetPort(Port);
 

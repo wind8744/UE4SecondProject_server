@@ -26,8 +26,11 @@ void UChatUI::SendBtnClick()
 {
 	// send message to server
 	FString InputChat = m_Input->GetText().ToString();
-	
-	PrintViewport(1.f,FColor::Red,InputChat);
+
+	// Print my message ** 수정
+	AddMyMessage(InputChat);
+
+	//PrintViewport(1.f,FColor::Red,InputChat);
 
 	// make packet
 	uint8 Packet[PACKET_SIZE] = {};
@@ -43,6 +46,16 @@ void UChatUI::AddMessage(const FString& Msg)
 {
 	UChatDataObj* Data = NewObject<UChatDataObj>(this, UChatDataObj::StaticClass());
 	Data->SetMessage(Msg);
+
+	m_ChatList->AddItem(Data);
+	m_ChatList->ScrollToBottom(); // 자동으로 스크롤 
+}
+
+void UChatUI::AddMyMessage(const FString& Mgr)
+{
+	UChatDataObj* Data = NewObject<UChatDataObj>(this, UChatDataObj::StaticClass());
+	Data->SetMessage(Mgr);
+	Data->SetFlag(true);
 
 	m_ChatList->AddItem(Data);
 	m_ChatList->ScrollToBottom(); // 자동으로 스크롤 

@@ -20,6 +20,11 @@ ACharacterMuriel::ACharacterMuriel()
 	if (AnimAsset.Succeeded())
 		GetMesh()->SetAnimInstanceClass(AnimAsset.Class);
 	
+	// Info
+	m_CharInfo.Name = TEXT("Test1");
+	m_CharInfo.Job = ECharJob::Wizard;
+	m_CharInfo.HP = 120;
+	m_CharInfo.MP = 20;
 }
 
 // Called when the game starts or when spawned

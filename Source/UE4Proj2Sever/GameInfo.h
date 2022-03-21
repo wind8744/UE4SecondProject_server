@@ -38,6 +38,15 @@ enum class ECharAnimType : uint8
 	DEATH,
 };
 
+UENUM(BlueprintType)
+enum class ECharJob : uint8
+{
+	Wizard,
+	Knight,
+	Archer,
+};
+
+
 struct RecvQueueData
 {
 	int32 Protocol;
@@ -54,5 +63,25 @@ struct RecvQueueData
 
 enum class NetworkProtocol
 {
-	Chat
+	Chat,
+	UserConnect
+};
+
+USTRUCT(BlueprintType)
+struct FCharInfo
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		FString		Name;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		ECharJob	Job;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		int32		HP;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		int32		MP;
+
 };

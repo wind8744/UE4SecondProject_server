@@ -22,6 +22,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
 	USpringArmComponent* m_SpringArm;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
+	FCharInfo		m_CharInfo;
+
 	bool			m_bIsDead;
 	bool			m_bMoveKey;
 	float			m_fSideValue;
@@ -32,6 +35,7 @@ protected:
 	float			m_fArmLengthSpeed = 0.0f;
 	float			m_fArmRotationSpeed = 0.0f;
 	FVector			m_vDirectionToMove = FVector::ZeroVector;
+
 
 private:
 	void ViewInit();

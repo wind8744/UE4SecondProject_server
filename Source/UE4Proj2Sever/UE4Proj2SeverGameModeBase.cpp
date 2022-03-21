@@ -6,6 +6,7 @@
 #include "Network/NetworkManager.h"
 #include "Network/RecvQueue.h"
 #include "Network/PacketStream.h"
+#include "User/MyUserCharacter.h"
 
 AUE4Proj2SeverGameModeBase::AUE4Proj2SeverGameModeBase()
 {
@@ -67,13 +68,56 @@ void AUE4Proj2SeverGameModeBase::Tick(float DeltaTime)
 				FMemory::Memcpy(Mgs, Packet, Length);
 				m_MainWidget->GetChatWidget()->AddMessage(Mgs);
 
-				PrintViewport(1.f, FColor::Red, Mgs);
+				//PrintViewport(1.f, FColor::Red, Mgs);
 
 				break;
 			}
+					//case NetworkProtocol::UserConnect:
+					//{
+					//	// 다른 유저가 접속함. -> 생성
+					//	// 컨트롤러는 AI controller
+					//	PacketStream stream;
+					//	stream.SetBuffer(Packet);
 
-			default:
-				break;
+					//	ECharJob Job;
+					//	stream.Read(&Job, 4);
+
+					//	AUserCharacter* user = nullptr;
+
+					//	FVector Pos, Scale;
+					//	FRotator Rot;
+					//	FString Name;
+
+					//	stream.Read(&Pos, 12);
+					//	stream.Read(&Scale, 12);
+					//	stream.Read(&Rot, 12);
+					//	stream.Read(&Name, 12);
+
+					//	switch (Job)
+					//	{
+					//	case ECharJob::Wizard:
+					//	{
+
+					//		FActorSpawnParameters param;
+					//		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+					//		user = GetWorld()->SpawnActor<AMyUserCharacter>(AMyUserCharacter::StaticClass(), Pos, Rot, param);
+					//		user->SetActorScale3D(Scale);
+					//		break;
+					//	}
+					//	case ECharJob::Knight:
+					//	{
+					//		FActorSpawnParameters param;
+					//		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+					//		user = GetWorld()->SpawnActor<AMyUserCharacter>(AMyUserCharacter::StaticClass(), Pos, Rot, param);
+					//		user->SetActorScale3D(Scale);
+					//		break;
+					//	}
+					//	case ECharJob::Archer:
+					//		break;
+					//	}
+
+					//	break;
+					//}
 			}
 		}
 	}

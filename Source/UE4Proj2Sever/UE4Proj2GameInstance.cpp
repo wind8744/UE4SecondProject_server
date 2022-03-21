@@ -6,6 +6,9 @@
 
 UUE4Proj2GameInstance::UUE4Proj2GameInstance()
 {
+	//static ConstructorHelpers::FObjectFinder<UDataTable> CharInfoTableAsset(TEXT(""));
+	//if (CharInfoTableAsset.Succeeded())
+	//	m_CharInfoTable = CharInfoTableAsset.Object;
 }
 
 UUE4Proj2GameInstance::~UUE4Proj2GameInstance()
@@ -21,4 +24,9 @@ void UUE4Proj2GameInstance::Init()
 	// Init Network Mgr
 	NetworkManager::GetInst()->Init();
 
+}
+
+const FCharInfoTable* UUE4Proj2GameInstance::FindCharInfo(const FString& name)
+{
+	return m_CharInfoTable->FindRow<FCharInfoTable>(*name, "");
 }
