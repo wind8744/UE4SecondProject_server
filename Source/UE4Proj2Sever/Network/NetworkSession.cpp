@@ -40,7 +40,8 @@ void NetworkSession::Close()
 	if (m_Socket)
 	{
 		m_Socket->Close();
-		m_Socket = nullptr;
+		//m_Socket = nullptr;
+		delete m_Socket;
 	}
 
 }

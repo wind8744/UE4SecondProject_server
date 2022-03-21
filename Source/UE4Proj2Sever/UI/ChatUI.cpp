@@ -4,7 +4,7 @@
 #include "ChatUI.h"
 #include "../Network/NetworkManager.h"
 #include "../Network/NetworkSession.h"
-
+#include "ChatDataObj.h"
 
 void UChatUI::NativeConstruct()
 {
@@ -37,4 +37,13 @@ void UChatUI::SendBtnClick()
 	NetworkSession* Session = NetworkManager::GetInst()->GetSession();
 	Session->Write((int)NetworkProtocol::Chat,Length,Packet);
 
+}
+
+void UChatUI::AddMessage(const FString& Msg)
+{
+	UChatDataObj* Data = NewObject<UChatDataObj>(this, UChatDataObj::StaticClass());
+	Data->SetMessage(Msg);
+
+	m_ChatList->AddItem(Data);
+	m_ChatList->ScrollToBottom(); // 자동으로 스크롤 
 }

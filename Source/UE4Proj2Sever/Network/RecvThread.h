@@ -25,8 +25,8 @@ public:
 	}
 
 public:
-	bool	Init();
-	uint32	Run();
-	void	Exit();
+	virtual bool	Init();
+	virtual uint32	Run();
+	virtual void	Exit();
 
 };

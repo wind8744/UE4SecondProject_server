@@ -8,7 +8,7 @@ void UMainUI::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	//m_CharacterHUD = Cast<UCharacterHUD>(GetWidgetFromName(TEXT("UI_CharacterHUD")));
+	m_ChatWidget = Cast<UChatUI>(GetWidgetFromName(TEXT("ChatUI")));
 }
 
 void UMainUI::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)

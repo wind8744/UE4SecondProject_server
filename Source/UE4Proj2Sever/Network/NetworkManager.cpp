@@ -30,6 +30,8 @@ NetworkManager::~NetworkManager()
 
 	if (m_Thread)
 	{
+		m_Thread->Exit();
+
 		delete m_Thread;
 		m_Thread = nullptr;
 	}

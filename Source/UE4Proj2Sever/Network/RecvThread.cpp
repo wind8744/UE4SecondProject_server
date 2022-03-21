@@ -8,7 +8,7 @@
 
 RecvThread::RecvThread():
 	m_Session(nullptr)
-	,m_Loop(false)
+	,m_Loop(true)
 {
 }
 

@@ -34,6 +34,7 @@ protected:
 public:
 	UFUNCTION()
 		void SendBtnClick();
-	 
+
+	void AddMessage(const FString& Msg);
 
 };
