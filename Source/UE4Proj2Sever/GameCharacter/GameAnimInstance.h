@@ -51,6 +51,9 @@ public:
 
 public:
 	// Notify function
-	//UFUNCTION() 
-		//void AnimNotify_AttackEnd();
+	UFUNCTION() 
+		void AnimNotify_AttackEnd();
+	
+	UFUNCTION()
+		void AnimNotify_AttackCombo();
 };

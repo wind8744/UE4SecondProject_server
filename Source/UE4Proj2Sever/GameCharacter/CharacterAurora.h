@@ -4,19 +4,34 @@
 
 #include "../GameInfo.h"
 #include "GameCharacter.h"
-#include "CharacterMurdock.generated.h"
+#include "CharacterAurora.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UE4PROJ2SEVER_API ACharacterMurdock : public AGameCharacter
+class UE4PROJ2SEVER_API ACharacterAurora : public AGameCharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	ACharacterMurdock();
+	ACharacterAurora();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		TArray<UAnimMontage*>	m_AttackMontageArray;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		TArray<UAnimMontage*>	m_SkillMontageArray;
+
+	int			m_AttackIdx;
+
+public:
+	virtual void AttackEnd();
+
+protected:
+	virtual void Attack();
+	virtual void Dash();
 
 protected:
 	// Called when the game starts or when spawned
@@ -28,4 +43,5 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 };

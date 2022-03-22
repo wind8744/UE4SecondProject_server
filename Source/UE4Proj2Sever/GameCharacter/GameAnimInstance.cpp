@@ -30,13 +30,6 @@ void UGameAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		{
 			m_Speed = Movement->Velocity.Size();
 
-			if (m_Speed > 0.f)		
-				m_AnimType = ECharAnimType::RUN;
-			
-			else
-				m_AnimType = ECharAnimType::IDLE;
-
-
 			bool OnGround = Movement->IsMovingOnGround();
 			m_OnGround = OnGround;
 
@@ -50,11 +43,19 @@ void UGameAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	}
 }
 
-//void UGameAnimInstance::AnimNotify_AttackEnd()
-//{
-//	m_Attack = false;
-//	APlayerCharacter* Player = Cast<APlayerCharacter>(TryGetPawnOwner());
-//
-//	if (Player)
-//		Player->AttackEnd();
-//}
+void UGameAnimInstance::AnimNotify_AttackEnd()
+{
+	m_Attack = false;
+
+	AGameCharacter* Player = Cast<AGameCharacter>(TryGetPawnOwner());
+	if (Player)
+		Player->AttackEnd();
+}
+
+void UGameAnimInstance::AnimNotify_AttackCombo()
+{
+	AGameCharacter* Player = Cast<AGameCharacter>(TryGetPawnOwner());
+
+	if (Player)
+		Player->EnableAttack(true);
+}

@@ -25,6 +25,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
 	FCharInfo		m_CharInfo;
 
+	class UGameAnimInstance* m_AnimInst;
+
 	bool			m_bIsDead;
 	bool			m_bMoveKey;
 	float			m_fSideValue;
@@ -36,15 +38,30 @@ protected:
 	float			m_fArmRotationSpeed = 0.0f;
 	FVector			m_vDirectionToMove = FVector::ZeroVector;
 
+	bool			m_bAttackable;	//공격 가능?
+
 
 private:
 	void ViewInit();
 
 public:
+	void EnableAttack(bool attack) { m_bAttackable = attack; }
+
+	// Key Setting 
 	void CameraUpKey(float AxisValue);
 	void CameraZoomKey(float AxisValue);
 	
 	void JumpKey();
+	void AttackKey();
+	void DashKey();
+
+	// Notify
+	virtual void AttackEnd();
+
+protected:
+	// character setting
+	virtual void Attack();
+	virtual void Dash();
 
 protected:
 	// Called when the game starts or when spawned

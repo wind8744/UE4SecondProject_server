@@ -18,6 +18,9 @@ NetworkManager::NetworkManager():
 
 NetworkManager::~NetworkManager()
 {
+	if (m_Thread)
+		m_Thread->Exit();
+
 	if (m_Session)
 		m_Session->Close();
 
@@ -30,8 +33,7 @@ NetworkManager::~NetworkManager()
 
 	if (m_Thread)
 	{
-		m_Thread->Exit();
-
+		//m_Thread->Exit();
 		delete m_Thread;
 		m_Thread = nullptr;
 	}

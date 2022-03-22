@@ -30,8 +30,8 @@ void AGameCharController::SetupInputComponent()
 	InputComponent->BindAction(TEXT("RClick"), EInputEvent::IE_Pressed, this, &AGameCharController::PressedRClick);
 	InputComponent->BindAction(TEXT("RClick"), EInputEvent::IE_Released, this, &AGameCharController::ReleasedRClick);
 
-	InputComponent->BindAction(TEXT("LClick"), EInputEvent::IE_Pressed, this, &AGameCharController::PressedLClick);
-	InputComponent->BindAction(TEXT("LClick"), EInputEvent::IE_Released, this, &AGameCharController::ReleasedLClick);
+	//InputComponent->BindAction(TEXT("LClick"), EInputEvent::IE_Pressed, this, &AGameCharController::PressedLClick);
+	//InputComponent->BindAction(TEXT("LClick"), EInputEvent::IE_Released, this, &AGameCharController::ReleasedLClick);
 }
 
 void AGameCharController::MoveToMouseCursor()

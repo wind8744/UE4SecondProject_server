@@ -19,10 +19,16 @@ AUE4Proj2SeverGameModeBase::AUE4Proj2SeverGameModeBase()
 		m_MainUIClass = MainUIClass.Class;
 
 	// Set default pawn
-	static ConstructorHelpers::FClassFinder<APawn> PawnClass(TEXT("Blueprint'/Game/Player/Muriel/BPMuriel.BPMuriel_C'"));
+	static ConstructorHelpers::FClassFinder<APawn> PawnClass(TEXT("Blueprint'/Game/Player/Kwang/BPKwang.BPKwang_C'"));
 	if (PawnClass.Succeeded())
 		DefaultPawnClass = PawnClass.Class;
-	
+
+	// Set default pawn
+	//static ConstructorHelpers::FClassFinder<APawn> PawnClass(TEXT("Blueprint'/Game/Player/Aurora/BPAurora.BPAurora_C'"));
+	//if (PawnClass.Succeeded())
+	//	DefaultPawnClass = PawnClass.Class;
+
+
 	// Set default Controller
 	static ConstructorHelpers::FClassFinder<AController> ControllClass(TEXT("Blueprint'/Game/Player/BPCharController.BPCharController_C'"));
 	if (ControllClass.Succeeded())
@@ -72,52 +78,68 @@ void AUE4Proj2SeverGameModeBase::Tick(float DeltaTime)
 
 				break;
 			}
-					//case NetworkProtocol::UserConnect:
-					//{
-					//	// 다른 유저가 접속함. -> 생성
-					//	// 컨트롤러는 AI controller
-					//	PacketStream stream;
-					//	stream.SetBuffer(Packet);
+			case NetworkProtocol::UserConnect:
+			{
+				// 여기에 들어오면 다른 유저가 접속했다는 것 -> 유저 생성
+				PacketStream	stream;
+				stream.SetBuffer(Packet);
 
-					//	ECharJob Job;
-					//	stream.Read(&Job, 4);
+				ECharJob	Job;
+				stream.Read(&Job, 4);
 
-					//	AUserCharacter* user = nullptr;
+				FVector	Pos, Scale;
+				FRotator	Rot;
 
-					//	FVector Pos, Scale;
-					//	FRotator Rot;
-					//	FString Name;
+				stream.Read(&Pos, 12);
+				stream.Read(&Scale, 12);
+				stream.Read(&Rot, 12);
 
-					//	stream.Read(&Pos, 12);
-					//	stream.Read(&Scale, 12);
-					//	stream.Read(&Rot, 12);
-					//	stream.Read(&Name, 12);
+				AUserCharacter* User = nullptr;
 
-					//	switch (Job)
-					//	{
-					//	case ECharJob::Wizard:
-					//	{
+				switch (Job)
+				{
+				case ECharJob::Knight:
+				{
+					FActorSpawnParameters	param;
+					param.SpawnCollisionHandlingOverride =
+						ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+					User = GetWorld()->SpawnActor<AMyUserCharacter>(
+						AMyUserCharacter::StaticClass(), Pos + FVector(0.f, -200.f, 0.f), Rot,
+						param);
+					User->SetActorScale3D(Scale);
 
-					//		FActorSpawnParameters param;
-					//		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-					//		user = GetWorld()->SpawnActor<AMyUserCharacter>(AMyUserCharacter::StaticClass(), Pos, Rot, param);
-					//		user->SetActorScale3D(Scale);
-					//		break;
-					//	}
-					//	case ECharJob::Knight:
-					//	{
-					//		FActorSpawnParameters param;
-					//		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-					//		user = GetWorld()->SpawnActor<AMyUserCharacter>(AMyUserCharacter::StaticClass(), Pos, Rot, param);
-					//		user->SetActorScale3D(Scale);
-					//		break;
-					//	}
-					//	case ECharJob::Archer:
-					//		break;
-					//	}
+					PrintViewport(1.f, FColor::Red, TEXT("Knight"));
+				}
+				break;
+				case ECharJob::Archer:
+				{
+					FActorSpawnParameters	param;
+					param.SpawnCollisionHandlingOverride =
+						ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+					User = GetWorld()->SpawnActor<AMyUserCharacter>(
+						AMyUserCharacter::StaticClass(), Pos + FVector(0.f, -200.f, 0.f), Rot,
+						param);
+					User->SetActorScale3D(Scale);
 
-					//	break;
-					//}
+					PrintViewport(1.f, FColor::Red, TEXT("Archer"));
+				}
+					break;
+				case ECharJob::Wizard:
+				{
+					FActorSpawnParameters	param;
+					param.SpawnCollisionHandlingOverride =
+						ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+					User = GetWorld()->SpawnActor<AMyUserCharacter>(
+						AMyUserCharacter::StaticClass(), Pos + FVector(0.f, -200.f, 0.f), Rot,
+						param);
+					User->SetActorScale3D(Scale);
+
+					PrintViewport(1.f, FColor::Red, TEXT("Wizard"));
+				}
+					break;
+				}
+				break;
+			}
 			}
 		}
 	}

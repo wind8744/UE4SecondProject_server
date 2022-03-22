@@ -2,6 +2,7 @@
 
 
 #include "GameCharacter.h"
+#include "GameAnimInstance.h"
 #include "../Network/NetworkManager.h"
 #include "../Network/NetworkSession.h"
 #include "../Network/PacketStream.h"
@@ -24,12 +25,15 @@ AGameCharacter::AGameCharacter()
 	ViewInit();
 
 	m_bIsDead = false;
+	m_bAttackable = true;
 }
 
 // Called when the game starts or when spawned
 void AGameCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	m_AnimInst = Cast<UGameAnimInstance>(GetMesh()->GetAnimInstance());
 
 	// 서버에 현재 캐릭터의 위치 넘겨줌
 	NetworkSession* Session = NetworkManager::GetInst()->GetSession();
@@ -40,13 +44,16 @@ void AGameCharacter::BeginPlay()
 	FVector charLoc = GetActorLocation();
 	FRotator charRot = GetActorRotation();
 	FVector charScale = GetActorScale();
+	int32 job = (int32)m_CharInfo.Job;
 
 	Stream.SetBuffer(Packet);
-	Stream.Write(&m_CharInfo.Job,sizeof(ECharJob));
+
+	Stream.Write(&job,sizeof(int32));
 	Stream.Write(&charLoc, sizeof(FVector));
 	Stream.Write(&charScale, sizeof(FVector));
 	Stream.Write(&charRot, sizeof(FRotator));
-	Stream.Write(&m_CharInfo.Name, 12);
+	//Stream.Write(&m_CharInfo.Name, 12);
+	
 	Session->Write((int)NetworkProtocol::UserConnect, Stream.GetLength(), Packet);
 
 }
@@ -59,20 +66,6 @@ void AGameCharacter::Tick(float DeltaTime)
 	if (m_bIsDead)
 		return;
 
-	//m_SpringArm->TargetArmLength = FMath::FInterpTo(m_SpringArm->TargetArmLength,
-	//	ArmLengthTo, DeltaTime, ArmLengthSpeed);
-
-	//회전값 방향 보간
-	//m_SpringArm->SetRelativeRotation(FMath::RInterpTo(m_SpringArm->GetRelativeRotation(),
-	//	m_rArmRotationTo, DeltaTime, m_fArmRotationSpeed));
-
-	//if (m_vDirectionToMove.SizeSquared() > 0.f)
-	//{
-	//	//방향 벡터를 회전값으로 하여 캐릭터 회전
-	//	GetController()->SetControlRotation(m_vDirectionToMove.ToOrientationRotator());
-	//	//벡터값 방향으로 이동
-	//	AddMovementInput(m_vDirectionToMove);
-	//}
 }
 
 // Called to bind functionality to input
@@ -86,8 +79,26 @@ void AGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AGameCharacter::AddControllerYawInput);
 
 	//Action
+	PlayerInputComponent->BindAction(TEXT("LClick"), EInputEvent::IE_Pressed, this, &AGameCharacter::AttackKey);
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &AGameCharacter::JumpKey);
+	PlayerInputComponent->BindAction(TEXT("Dash"), EInputEvent::IE_Pressed, this, &AGameCharacter::DashKey);
+}
 
+void AGameCharacter::AttackKey()
+{
+	if (m_bAttackable)
+	{
+		m_bAttackable = false;
+		Attack();
+	}
+}
+
+void AGameCharacter::DashKey()
+{
+	if (m_bAttackable)
+	{
+		Dash();
+	}
 }
 
 void AGameCharacter::CameraUpKey(float AxisValue)
@@ -130,6 +141,7 @@ void AGameCharacter::ViewInit()
 	//ArmLengthSpeed = 3.f;
 	m_fArmRotationSpeed = 5.f;
 
+	//m_SpringArm->AddLocalRotation()
 	m_SpringArm->TargetArmLength = 1300.f;
 	m_SpringArm->bUsePawnControlRotation = false;
 	m_SpringArm->bInheritPitch = false;
@@ -150,3 +162,7 @@ void AGameCharacter::ViewInit()
 
 	bUseControllerRotationYaw = false;
 }
+
+void AGameCharacter::Dash() {} //virtual 
+void AGameCharacter::Attack() {} //virtual
+void AGameCharacter::AttackEnd() { m_bAttackable = true; } //virtual

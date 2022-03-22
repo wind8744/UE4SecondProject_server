@@ -24,10 +24,10 @@ void UChatUI::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
 void UChatUI::SendBtnClick()
 {
-	// send message to server
 	FString InputChat = m_Input->GetText().ToString();
+	m_Input->SetText(FText::FromString(""));
 
-	// Print my message ** ¼öÁ¤
+	// Print my message
 	AddMyMessage(InputChat);
 
 	//PrintViewport(1.f,FColor::Red,InputChat);
@@ -37,6 +37,7 @@ void UChatUI::SendBtnClick()
 	int32 Length = InputChat.Len() * sizeof(TCHAR);
 	FMemory::Memcpy(Packet, *InputChat, Length);
 
+	// send message to server
 	NetworkSession* Session = NetworkManager::GetInst()->GetSession();
 	Session->Write((int)NetworkProtocol::Chat,Length,Packet);
 
