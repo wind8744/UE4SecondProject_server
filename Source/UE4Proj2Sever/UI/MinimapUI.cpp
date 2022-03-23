@@ -16,7 +16,6 @@ void UMinimapUI::NativeConstruct()
 void UMinimapUI::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
-
 }
 
 void UMinimapUI::CreateMonsterArray()
