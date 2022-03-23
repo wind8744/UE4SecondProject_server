@@ -9,6 +9,8 @@ void UMainUI::NativeConstruct()
 	Super::NativeConstruct();
 
 	m_ChatWidget = Cast<UChatUI>(GetWidgetFromName(TEXT("ChatUI")));
+	m_MinimapWidget = Cast<UMinimapUI>(GetWidgetFromName(TEXT("MinimapUI")));
+	
 }
 
 void UMainUI::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)

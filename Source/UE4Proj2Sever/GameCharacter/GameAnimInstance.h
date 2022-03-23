@@ -56,4 +56,10 @@ public:
 	
 	UFUNCTION()
 		void AnimNotify_AttackCombo();
+
+	UFUNCTION()
+		void AnimNotify_NormalAttack();
+	
+	UFUNCTION()
+		void AnimNotify_SkillStart();
 };

@@ -3,9 +3,11 @@
 
 #include "GameCharacter.h"
 #include "GameAnimInstance.h"
+#include "../UE4Proj2SeverGameModeBase.h"
 #include "../Network/NetworkManager.h"
 #include "../Network/NetworkSession.h"
 #include "../Network/PacketStream.h"
+#include "../UI/MinimapUI.h"
 
 // Sets default values
 AGameCharacter::AGameCharacter()
@@ -26,6 +28,7 @@ AGameCharacter::AGameCharacter()
 
 	m_bIsDead = false;
 	m_bAttackable = true;
+	m_iUseSkillIdx = 0;
 }
 
 // Called when the game starts or when spawned
@@ -35,6 +38,9 @@ void AGameCharacter::BeginPlay()
 
 	m_AnimInst = Cast<UGameAnimInstance>(GetMesh()->GetAnimInstance());
 
+	// 몇초후에 불리게? = 0.5f, 계속 반복? = true, 몇초후에 시작? = 바로(기본값)
+	GetWorldTimerManager().SetTimer(m_MonDetectTimer, this, &AGameCharacter::MonsterDetect, 0.5f, true);
+	
 	// 서버에 현재 캐릭터의 위치 넘겨줌
 	NetworkSession* Session = NetworkManager::GetInst()->GetSession();
 	
@@ -82,6 +88,10 @@ void AGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction(TEXT("LClick"), EInputEvent::IE_Pressed, this, &AGameCharacter::AttackKey);
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &AGameCharacter::JumpKey);
 	PlayerInputComponent->BindAction(TEXT("Dash"), EInputEvent::IE_Pressed, this, &AGameCharacter::DashKey);
+
+	PlayerInputComponent->BindAction(TEXT("Skill1"), EInputEvent::IE_Pressed, this, &AGameCharacter::Skill1Key);
+	PlayerInputComponent->BindAction(TEXT("Skill2"), EInputEvent::IE_Pressed, this, &AGameCharacter::Skill2Key);
+	PlayerInputComponent->BindAction(TEXT("Skill3"), EInputEvent::IE_Pressed, this, &AGameCharacter::Skill3Key);
 }
 
 void AGameCharacter::AttackKey()
@@ -92,7 +102,18 @@ void AGameCharacter::AttackKey()
 		Attack();
 	}
 }
-
+void AGameCharacter::Skill1Key()
+{
+	Skill1(); 
+}
+void AGameCharacter::Skill2Key()
+{
+	Skill2();
+}
+void AGameCharacter::Skill3Key()
+{
+	Skill3();
+}
 void AGameCharacter::DashKey()
 {
 	if (m_bAttackable)
@@ -132,7 +153,6 @@ void AGameCharacter::JumpKey()
 	Jump();
 }
 
-
 void AGameCharacter::ViewInit()
 {
 	m_fArmLengthTo = 800.0f;
@@ -163,6 +183,51 @@ void AGameCharacter::ViewInit()
 	bUseControllerRotationYaw = false;
 }
 
-void AGameCharacter::Dash() {} //virtual 
-void AGameCharacter::Attack() {} //virtual
-void AGameCharacter::AttackEnd() { m_bAttackable = true; } //virtual
+void AGameCharacter::MonsterDetect()
+{
+	// 플레이어 탐지 박스 안의 몬스터 감지해서 미니맵 표시
+	TArray<FHitResult> resultArray;
+	
+	FVector MyPos = GetActorLocation();
+	FVector StartPos = MyPos - FVector(1500.f, 2000.f, 1000.f);
+	FVector EndPos = StartPos + FVector(3000.f, 4000.f, 2000.f);
+
+	FCollisionQueryParams param(NAME_None, false, this);
+
+	bool Col = GetWorld()->SweepMultiByChannel(resultArray,StartPos,EndPos,FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel11, FCollisionShape::MakeBox(FVector(1500.f,2000.f,1000.f)), param);
+
+	AUE4Proj2SeverGameModeBase* gamemode = Cast<AUE4Proj2SeverGameModeBase>(GetWorld()->GetAuthGameMode());
+	UMinimapUI* minimap = nullptr;
+	if (gamemode)
+	{
+		minimap = gamemode->GetMainUI()->GetMinimapWidget();
+		minimap->ClearMonster();
+	}
+
+	if (Col)
+	{
+		for (auto& result : resultArray)
+		{
+			// 나와 몬스터간의 거리
+			FVector RelativePos = result.GetActor()->GetActorLocation() - MyPos;
+			//RelativePos *= 0.1f; //
+			if (nullptr != minimap)
+			{
+				minimap->AddMonster(RelativePos);
+			}
+		}
+	}
+
+}
+
+void AGameCharacter::UseSkill() {}
+void AGameCharacter::NormalAttack() {}
+void AGameCharacter::AttackEnd() { m_bAttackable = true; }
+
+// virtual
+void AGameCharacter::Dash() {} 
+void AGameCharacter::Attack() {} 
+void AGameCharacter::Skill1() {}
+void AGameCharacter::Skill2() {}
+void AGameCharacter::Skill3() {}

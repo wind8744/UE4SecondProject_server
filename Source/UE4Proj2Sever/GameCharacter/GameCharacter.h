@@ -27,6 +27,8 @@ protected:
 
 	class UGameAnimInstance* m_AnimInst;
 
+	FTimerHandle			 m_MonDetectTimer;
+
 	bool			m_bIsDead;
 	bool			m_bMoveKey;
 	float			m_fSideValue;
@@ -39,7 +41,7 @@ protected:
 	FVector			m_vDirectionToMove = FVector::ZeroVector;
 
 	bool			m_bAttackable;	//공격 가능?
-
+	int				m_iUseSkillIdx;
 
 private:
 	void ViewInit();
@@ -48,20 +50,29 @@ public:
 	void EnableAttack(bool attack) { m_bAttackable = attack; }
 
 	// Key Setting 
+	// Axis
 	void CameraUpKey(float AxisValue);
 	void CameraZoomKey(float AxisValue);
-	
+	//  Action
 	void JumpKey();
 	void AttackKey();
+	void Skill1Key();
+	void Skill2Key();
+	void Skill3Key();
 	void DashKey();
 
 	// Notify
 	virtual void AttackEnd();
+	virtual void NormalAttack();
+	virtual void UseSkill();
 
 protected:
 	// character setting
 	virtual void Attack();
 	virtual void Dash();
+	virtual void Skill1();
+	virtual void Skill2();
+	virtual void Skill3();
 
 protected:
 	// Called when the game starts or when spawned
@@ -73,5 +84,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION()
+		void MonsterDetect();
 
 };

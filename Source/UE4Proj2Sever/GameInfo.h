@@ -5,14 +5,20 @@
 
 #include "EngineMinimal.h"
 #include "DrawDebugHelpers.h"
+#include "DestructibleComponent.h"
 #include "Engine.h"
 #include "EngineGlobals.h"
+#include "Engine/AssetManager.h"
 
 #include "Networking.h"
 #include "Sockets.h"
 #include "SocketSubsystem.h"
 #include "HAL/Runnable.h"
 #include "HAL/RunnableThread.h"
+#include "Math/UnrealMathVectorCommon.h" 
+
+#include "Blueprint/IUserobjectListEntry.h"
+#include "Blueprint/WidgetTree.h"
 
 #include "GameInfo.generated.h"
 
@@ -78,10 +84,36 @@ public:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		ECharJob	Job;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float			AttackDistance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float			AttackAngle;
+
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		int32		HP;
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		int32		MP;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		int32			Level;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		int32			Exp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		int32			Gold;
+};
+
+USTRUCT()
+struct FAssetPathInfo
+{
+	GENERATED_BODY()
+
+		UPROPERTY(EditAnywhere, Category = "Path")
+		FString		Name;
+
+	UPROPERTY(EditAnywhere, Category = "Path")
+		FSoftObjectPath		Path;
 };

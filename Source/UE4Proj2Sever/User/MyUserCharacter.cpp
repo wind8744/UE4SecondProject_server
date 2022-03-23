@@ -9,10 +9,9 @@ AMyUserCharacter::AMyUserCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Mesh Asset
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MurielAsset(TEXT("SkeletalMesh'/Game/ParagonMuriel/Characters/Heroes/Muriel/Skins/Tier_1/Muriel_Black/Meshes/MurielBlack.MurielBlack'"));
-	if (MurielAsset.Succeeded())
-		GetMesh()->SetSkeletalMesh(MurielAsset.Object);
-
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AuroraAsset(TEXT("SkeletalMesh'/Game/ParagonAurora/Characters/Heroes/Aurora/Meshes/Aurora.Aurora'"));
+	if (AuroraAsset.Succeeded())
+		GetMesh()->SetSkeletalMesh(AuroraAsset.Object);
 }
 
 

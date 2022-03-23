@@ -3,7 +3,8 @@
 
 #include "GameCharController.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
-
+#include "../UE4Proj2SeverGameModeBase.h"
+#include "../UI/MinimapUI.h"
 
 AGameCharController::AGameCharController()
 {
@@ -37,6 +38,7 @@ void AGameCharController::SetupInputComponent()
 void AGameCharController::MoveToMouseCursor()
 {
 	FHitResult Hit;
+	
 	GetHitResultUnderCursor(ECC_Visibility, false, Hit);
 
 	if (Hit.bBlockingHit)
@@ -54,8 +56,15 @@ void AGameCharController::SetNewDestination(const FVector DestLocation)
 
 		if (Distance > 120.0f)
 		{
-			//SetControlRotation(DestLocation.ToOrientationRotator());
 			UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, DestLocation);
+	
+			AUE4Proj2SeverGameModeBase* GameMode = Cast<AUE4Proj2SeverGameModeBase>(GetWorld()->GetAuthGameMode());
+			if (GameMode)
+			{
+				FRotator Rot = MyPawn->GetActorRotation();
+				GameMode->GetMainUI()->GetMinimapWidget()->RotPoint(Rot.Yaw);
+			}
+			
 		}
 	}
 }

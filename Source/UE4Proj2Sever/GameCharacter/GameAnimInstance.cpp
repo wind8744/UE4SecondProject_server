@@ -36,7 +36,7 @@ void UGameAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 			if (m_OnGround && m_AnimType == ECharAnimType::FALL)
 				m_AnimType = ECharAnimType::IDLE;
 			
-			if (!m_OnGround && m_AnimType != ECharAnimType::JUMP && m_AnimType != ECharAnimType::SKILL)
+			if (!m_OnGround && m_AnimType != ECharAnimType::JUMP)// && m_AnimType != ECharAnimType::SKILL)
 				m_AnimType = ECharAnimType::FALL;
 		
 		}
@@ -55,7 +55,24 @@ void UGameAnimInstance::AnimNotify_AttackEnd()
 void UGameAnimInstance::AnimNotify_AttackCombo()
 {
 	AGameCharacter* Player = Cast<AGameCharacter>(TryGetPawnOwner());
-
 	if (Player)
 		Player->EnableAttack(true);
+}
+
+void UGameAnimInstance::AnimNotify_NormalAttack()
+{
+	AGameCharacter* Player = Cast<AGameCharacter>(TryGetPawnOwner());
+	if (Player)
+		Player->NormalAttack();
+}
+
+void UGameAnimInstance::AnimNotify_SkillStart()
+{
+	m_Attack = false;
+	AGameCharacter* Player = Cast<AGameCharacter>(TryGetPawnOwner());
+	if (Player)
+	{
+		Player->UseSkill();
+		Player->AttackEnd();
+	}
 }

@@ -22,9 +22,22 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		TSubclassOf<UMainUI>	m_MainUIClass;
 
-	UMainUI* m_MainWidget;
+	class UAssetPathMain* m_MainAssetPath;
+	class UMainUI* m_MainWidget;
 
 public:
+	UMainUI* GetMainUI() { return m_MainWidget; }
+
+public:
+
+	/**
+	 * Initialize the game.
+	 * The GameMode's InitGame() event is called before any other functions (including PreInitializeComponents() )
+	 * and is used by the GameMode to initialize parameters and spawn its helper classes.
+	 * @warning: this is called before actors' PreInitializeComponents.
+	 */
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage);
+
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 };

@@ -2,6 +2,8 @@
 
 
 #include "UE4Proj2SeverGameModeBase.h"
+#include "UE4Proj2GameInstance.h"
+#include "AssetMgr/AssetPathMain.h"
 #include "UI/ChatUI.h"
 #include "Network/NetworkManager.h"
 #include "Network/RecvQueue.h"
@@ -19,14 +21,14 @@ AUE4Proj2SeverGameModeBase::AUE4Proj2SeverGameModeBase()
 		m_MainUIClass = MainUIClass.Class;
 
 	// Set default pawn
-	static ConstructorHelpers::FClassFinder<APawn> PawnClass(TEXT("Blueprint'/Game/Player/Kwang/BPKwang.BPKwang_C'"));
-	if (PawnClass.Succeeded())
-		DefaultPawnClass = PawnClass.Class;
-
-	// Set default pawn
-	//static ConstructorHelpers::FClassFinder<APawn> PawnClass(TEXT("Blueprint'/Game/Player/Aurora/BPAurora.BPAurora_C'"));
+	//static ConstructorHelpers::FClassFinder<APawn> PawnClass(TEXT("Blueprint'/Game/Player/Kwang/BPKwang.BPKwang_C'"));
 	//if (PawnClass.Succeeded())
 	//	DefaultPawnClass = PawnClass.Class;
+
+	// Set default pawn
+	static ConstructorHelpers::FClassFinder<APawn> PawnClass(TEXT("Blueprint'/Game/Player/Aurora/BPAurora.BPAurora_C'"));
+	if (PawnClass.Succeeded())
+		DefaultPawnClass = PawnClass.Class;
 
 
 	// Set default Controller
@@ -36,7 +38,22 @@ AUE4Proj2SeverGameModeBase::AUE4Proj2SeverGameModeBase()
 
 }
 
+void AUE4Proj2SeverGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+	Super::InitGame(MapName, Options, ErrorMessage);
 
+	// Set pawn
+	//UUE4Proj2GameInstance* GameInst = Cast<UUE4Proj2GameInstance>(GetWorld()->GetGameInstance());
+	//if (GameInst)
+	//{
+	//	DefaultPawnClass = m_PlayerClassArray[0];
+	//}
+
+	m_MainAssetPath = UAssetPathMain::StaticClass()->GetDefaultObject<UAssetPathMain>();
+	m_MainAssetPath->ConvertPath();
+}
+
+// 게임 시작
 void AUE4Proj2SeverGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
