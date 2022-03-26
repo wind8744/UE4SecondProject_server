@@ -189,13 +189,13 @@ void AGameCharacter::MonsterDetect()
 	TArray<FHitResult> resultArray;
 	
 	FVector MyPos = GetActorLocation();
-	FVector StartPos = MyPos - FVector(1500.f, 2000.f, 1000.f);
-	FVector EndPos = StartPos + FVector(3000.f, 4000.f, 2000.f);
+	FVector StartPos = MyPos - FVector(250*5.f, 350*5.f, 1000.f); // UI 크기의 절반 뺀 좌표가 시작좌표
+	FVector EndPos = StartPos + FVector(500*5.f, 700*5.f, 2000.f); // EndPos는 시작좌표에서 플러스 UI 크기 (언리얼의 xy가 바뀌어있으므로)
 
 	FCollisionQueryParams param(NAME_None, false, this);
 
 	bool Col = GetWorld()->SweepMultiByChannel(resultArray,StartPos,EndPos,FQuat::Identity,
-		ECollisionChannel::ECC_GameTraceChannel11, FCollisionShape::MakeBox(FVector(1500.f,2000.f,1000.f)), param);
+		ECollisionChannel::ECC_GameTraceChannel11, FCollisionShape::MakeBox(FVector(250*5.f,350*5.f,1000.f)), param);
 
 	AUE4Proj2SeverGameModeBase* gamemode = Cast<AUE4Proj2SeverGameModeBase>(GetWorld()->GetAuthGameMode());
 	UMinimapUI* minimap = nullptr;
@@ -211,7 +211,6 @@ void AGameCharacter::MonsterDetect()
 		{
 			// 나와 몬스터간의 거리
 			FVector RelativePos = result.GetActor()->GetActorLocation() - MyPos;
-			//RelativePos *= 0.1f; //
 			if (nullptr != minimap)
 			{
 				minimap->AddMonster(RelativePos);

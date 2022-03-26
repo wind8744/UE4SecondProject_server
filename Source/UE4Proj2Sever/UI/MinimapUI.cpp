@@ -22,10 +22,10 @@ void UMinimapUI::CreateMonsterArray()
 {
 	m_AddCnt = 0;
 	
-	// 오브젝트 풀링 , 미리 20개 만들어놓음..
-	// 단점은 안쓰는건 메모리 아깝, 적당히 만들어 놓을것.
+	// 오브젝트 풀링 , 미리 10개 만들어놓음..
+	// 안쓰는건 메모리 아깝, 적당히 만들어 놓을것.
 	UCanvasPanel* Panel = WidgetTree->FindWidget<UCanvasPanel>(TEXT("MonsterParent"));
-	for (int32 i = 0; i < 20; ++i)
+	for (int32 i = 0; i < 10; ++i)
 	{
 		// 위젯 생성
 		FString Name = FString::Printf(TEXT("Monster%d"), i); 
@@ -63,7 +63,7 @@ void UMinimapUI::ClearMonster()
 
 void UMinimapUI::AddMonster(const FVector& MonPos)
 {
-	if (m_AddCnt == m_MonsterArray.Num())
+	if (m_AddCnt == m_MonsterArray.Num()) // 미리 생성해준것보다 더 많으면 더 추가
 	{
 		// 위젯트리에서 몬스터 캔버스 패널 root 받아와서
 		UCanvasPanel* Panel = WidgetTree->FindWidget<UCanvasPanel>(TEXT("MonsterParent"));
@@ -71,7 +71,7 @@ void UMinimapUI::AddMonster(const FVector& MonPos)
 		FString	Name = FString::Printf(TEXT("Monster%d"), m_AddCnt);
 		
 		// 몬스터 이미지 UI 추가
-		UImage* Image = WidgetTree->ConstructWidget<UImage>(UImage::StaticClass(), *Name);
+		UImage* Image = WidgetTree->ConstructWidget<UImage>(UImage::StaticClass(), *Name); // 위젯을 동적으로 생성해줌
 
 		Image->SetVisibility(ESlateVisibility::Collapsed);
 
@@ -81,30 +81,21 @@ void UMinimapUI::AddMonster(const FVector& MonPos)
 		{
 			// 자식으로 넣어줌
 			UCanvasPanelSlot* PanelSlot = Panel->AddChildToCanvas(Image);
-
 			PanelSlot->SetAlignment(FVector2D(0.5f, 0.5f));
 			PanelSlot->SetSize(FVector2D(10.f, 10.f));
 		}
 	}
 
-	//PrintViewport(1.f, FColor::Red, Pos.ToString());
-	m_MonsterArray[m_AddCnt]->SetVisibility(ESlateVisibility::Visible);
-
 	FVector2D	ImagePos;
-
 	ImagePos.X = MonPos.Y;
 	ImagePos.Y = MonPos.X * -1.f;
-	ImagePos *= 0.1f;
-
-	ImagePos.X += 200.f;
-	ImagePos.Y += 150.f;
-
-	PrintViewport(1.f, FColor::Red, ImagePos.ToString());
+	ImagePos *= 0.1f; // 10배 축소
+	//PrintViewport(1.f, FColor::Red, ImagePos);
 
 	UImage* Image = m_MonsterArray[m_AddCnt];
+	m_MonsterArray[m_AddCnt]->SetVisibility(ESlateVisibility::Visible);
 	++m_AddCnt;
 
 	UCanvasPanelSlot* PanelSlot = Cast<UCanvasPanelSlot>(Image->Slot);
-
 	PanelSlot->SetPosition(ImagePos);
 }
